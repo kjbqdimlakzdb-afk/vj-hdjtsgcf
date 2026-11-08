@@ -1,0 +1,673 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Vacciner, c'est protéger</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Exo+2:ital,wght@0,500;0,700;0,800;1,800&display=swap">
+<style>
+/* Concept : un deck plein écran, fond nuit, tout ce qui est important est un tube néon.
+   Palette : nuit #04050d · cyan #00f0ff · magenta #ff2bd6 · citron #b6ff3b · violet #8a5cff · alerte #ff4d5e
+   Type : Exo 2 (titres, chiffres) + Barlow (texte). Look volontairement unique : fond sombre. */
+:root{
+  --bg:#04050d; --bg2:#0b0e24; --ink:#eaf6ff; --mute:#93a6c9;
+  --cyan:#00f0ff; --mag:#ff2bd6; --lime:#b6ff3b; --vio:#8a5cff; --hot:#ff4d5e;
+  --f-d:'Exo 2','Segoe UI',system-ui,sans-serif; --f-b:'Barlow','Segoe UI',system-ui,sans-serif;
+  --gut:max(16px, env(safe-area-inset-left,0px)); --gutr:max(16px, env(safe-area-inset-right,0px));
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-b);font-size:clamp(17px,1.55vw,24px);line-height:1.4;overflow:hidden}
+.deck{position:relative;height:100%;overflow:hidden;background:radial-gradient(120% 90% at 80% 0%,#101444 0%,var(--bg) 60%)}
+#bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.progress{position:absolute;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,var(--cyan),var(--mag));box-shadow:0 0 12px var(--cyan),0 0 24px var(--mag);z-index:30;transition:width .5s}
+
+.slide{position:absolute;inset:0;z-index:1;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s,visibility .45s;overflow-y:auto;overflow-x:hidden}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto}
+.inner{min-height:100%;display:flex;flex-direction:column;padding-block:clamp(20px,5vh,56px) clamp(90px,14vh,112px);padding-left:var(--gut);padding-right:var(--gutr);max-width:1500px;margin-inline:auto}
+.wrap{margin-block:auto;min-width:0}
+.kick{font-family:var(--f-d);font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:.62em;color:var(--cyan);text-shadow:0 0 10px var(--cyan);margin:0 0 .6em}
+h1,h2{font-family:var(--f-d);font-weight:800;margin:0 0 .45em;line-height:1.02;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2.6rem,8.2vw,7rem);font-style:italic}
+h2{font-size:clamp(2rem,4.9vw,4.1rem)}
+.neon{color:#fff;text-shadow:0 0 6px #fff,0 0 14px var(--c1,var(--cyan)),0 0 32px var(--c1,var(--cyan)),0 0 64px var(--c1,var(--cyan))}
+.neon.m{--c1:var(--mag)} .neon.l{--c1:var(--lime)} .neon.v{--c1:var(--vio)}
+p{margin:0 0 .7em;max-width:46em}
+.lead{font-size:clamp(1.2rem,2.3vw,1.9rem);color:var(--ink);max-width:34em}
+.mute{color:var(--mute)}
+small,.small{font-size:.72em;color:var(--mute)}
+
+.grid{display:grid;gap:clamp(10px,1.5vw,22px);grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.card{--c:var(--cyan);position:relative;padding:clamp(14px,1.7vw,24px);border-radius:14px;border:1.5px solid var(--c);background:linear-gradient(160deg,color-mix(in srgb,var(--c) 14%,transparent),rgba(5,7,20,.82) 60%);box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 30%,transparent),0 0 22px color-mix(in srgb,var(--c) 45%,transparent),inset 0 0 22px color-mix(in srgb,var(--c) 14%,transparent);min-width:0}
+.card.m{--c:var(--mag)} .card.l{--c:var(--lime)} .card.v{--c:var(--vio)} .card.h{--c:var(--hot)}
+.card h3{font-family:var(--f-d);font-weight:700;font-size:1.18em;margin:0 0 .35em;color:#fff;text-shadow:0 0 12px var(--c)}
+.card p,.card ul{margin:0;font-size:.9em;color:#d5e4fb}
+.card ul{padding-left:1.1em}.card li{margin:.2em 0}
+.tag{font-family:var(--f-d);font-weight:800;font-size:.8em;color:var(--c);text-shadow:0 0 10px var(--c);letter-spacing:.12em}
+button.card{font:inherit;color:inherit;text-align:left;cursor:pointer}
+button.card:hover,button.card:focus-visible{transform:translateY(-4px);outline:none;box-shadow:0 0 0 1px var(--c),0 0 36px var(--c),inset 0 0 26px color-mix(in srgb,var(--c) 22%,transparent)}
+button.card{transition:transform .25s,box-shadow .25s}
+
+.big{font-family:var(--f-d);font-weight:800;font-size:clamp(2.6rem,7.5vw,6.4rem);line-height:1;color:#fff;font-variant-numeric:tabular-nums;text-shadow:0 0 8px #fff,0 0 22px var(--c,var(--cyan)),0 0 52px var(--c,var(--cyan))}
+.stat{--c:var(--cyan);padding:clamp(12px,1.6vw,22px) 0}
+.stat.m{--c:var(--mag)}.stat.l{--c:var(--lime)}.stat.v{--c:var(--vio)}.stat.h{--c:var(--hot)}
+.grid .big{font-size:clamp(2rem,4.3vw,3.9rem);white-space:nowrap}
+.g2 .big{font-size:clamp(2.4rem,6vw,5rem)}
+.stat .lab{font-size:.85em;color:var(--mute);margin-top:.4em;max-width:16em}
+.rule{height:2px;background:linear-gradient(90deg,var(--cyan),var(--mag),transparent);box-shadow:0 0 14px var(--cyan);margin:.2em 0 1em;max-width:24em;border:0}
+
+/* flux d'étapes */
+.flow{display:grid;gap:clamp(10px,1.4vw,18px);grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));counter-reset:st;position:relative}
+.flow .card::before{counter-increment:st;content:counter(st);position:absolute;top:-14px;left:14px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1.5px solid var(--c);color:var(--c);font-family:var(--f-d);font-weight:800;font-size:.8em;box-shadow:0 0 12px var(--c)}
+.pulse-line{height:3px;margin:0 0 clamp(18px,3vh,30px);background:linear-gradient(90deg,var(--cyan),var(--mag),var(--lime),var(--vio));background-size:300% 100%;box-shadow:0 0 14px var(--cyan);border-radius:3px}
+.slide.active .pulse-line{animation:slide-bg 3.5s linear infinite}
+@keyframes slide-bg{to{background-position:300% 0}}
+
+/* hexagones */
+.hexes{display:grid;gap:clamp(8px,1.2vw,16px);grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.hex{--c:var(--cyan);position:relative;min-height:150px;display:grid;place-items:center;text-align:center;padding:22px 26px;color:#fff;clip-path:polygon(25% 2%,75% 2%,99% 50%,75% 98%,25% 98%,1% 50%);background:var(--c)}
+.hex::before{content:"";position:absolute;inset:3px;clip-path:inherit;background:linear-gradient(160deg,#10163f,#05071a)}
+.hex>div{position:relative;font-size:.88em}
+.hex b{display:block;font-family:var(--f-d);font-size:1.1em;color:var(--c);text-shadow:0 0 10px var(--c);margin-bottom:.15em}
+.hexwrap{filter:drop-shadow(0 0 10px color-mix(in srgb,var(--c) 70%,transparent))}
+
+/* frise */
+.timeline{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));position:relative}
+.node{--c:var(--cyan);padding-top:26px;position:relative;min-width:0}
+.node::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--c);box-shadow:0 0 14px var(--c)}
+.node::after{content:"";position:absolute;top:-6px;left:0;width:15px;height:15px;border-radius:50%;background:var(--c);box-shadow:0 0 16px var(--c),0 0 32px var(--c)}
+.node h3{font-family:var(--f-d);font-size:1.12em;margin:0 0 .25em;color:#fff;text-shadow:0 0 10px var(--c)}
+.node p{font-size:.88em;color:#cfe0f8;margin:0}
+.node .when{font-family:var(--f-d);font-weight:800;font-size:1.9em;color:var(--c);text-shadow:0 0 14px var(--c);line-height:1}
+
+/* barres */
+.bars{display:flex;align-items:flex-end;gap:clamp(14px,3vw,40px);height:clamp(190px,34vh,320px)}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0;text-align:center}
+.bar .col{width:min(100%,130px);background:linear-gradient(180deg,var(--c),color-mix(in srgb,var(--c) 25%,transparent));box-shadow:0 0 26px var(--c);border-radius:8px 8px 0 0;height:0;transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+.bar .v{font-family:var(--f-d);font-weight:800;font-size:1.7em;color:#fff;text-shadow:0 0 12px var(--c);margin-bottom:6px}
+.bar .d{font-size:.78em;color:var(--mute);margin-top:8px}
+
+/* canvases */
+.stage{border-radius:16px;border:1.5px solid var(--cyan);box-shadow:0 0 26px color-mix(in srgb,var(--cyan) 50%,transparent),inset 0 0 30px color-mix(in srgb,var(--cyan) 12%,transparent);background:rgba(3,4,14,.7);overflow:hidden;position:relative}
+.stage canvas{display:block;width:100%;height:clamp(230px,40vh,400px)}
+.ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.btn{font:600 .85em var(--f-d);color:var(--ink);background:rgba(5,8,26,.8);border:1.5px solid var(--cyan);border-radius:99px;padding:.55em 1.1em;cursor:pointer;box-shadow:0 0 12px color-mix(in srgb,var(--cyan) 40%,transparent);transition:box-shadow .2s,background .2s}
+.btn:hover,.btn:focus-visible{outline:none;box-shadow:0 0 22px var(--cyan)}
+.btn[aria-pressed="true"],.btn.on{background:color-mix(in srgb,var(--cyan) 28%,#05081a);color:#fff;text-shadow:0 0 8px var(--cyan)}
+.btn.m{border-color:var(--mag);box-shadow:0 0 12px color-mix(in srgb,var(--mag) 40%,transparent)} .btn.m.on,.btn.m[aria-pressed="true"]{background:color-mix(in srgb,var(--mag) 28%,#05081a)}
+.readout{font-family:var(--f-d);font-weight:700;font-size:1.05em;color:var(--lime);text-shadow:0 0 10px var(--lime)}
+input[type=range]{accent-color:var(--cyan);width:min(100%,360px);height:28px}
+.people{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;padding:clamp(8px,1.4vw,16px);max-width:640px;margin-inline:auto}
+.p{aspect-ratio:1;border-radius:50%;background:var(--vio);box-shadow:0 0 6px var(--vio);transition:background .3s,box-shadow .3s,transform .3s}
+.p.vac{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.p.inf{background:var(--hot);box-shadow:0 0 12px var(--hot),0 0 22px var(--hot);transform:scale(1.15)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.78em;color:var(--mute);margin-top:10px}
+.legend i{display:inline-block;width:.8em;height:.8em;border-radius:50%;margin-right:.45em;vertical-align:-1px}
+
+/* matrice de rattrapage */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.mxw{overflow-x:auto;border-radius:12px;border:1.5px solid var(--cyan);box-shadow:0 0 22px color-mix(in srgb,var(--cyan) 40%,transparent);background:rgba(3,4,14,.75)}
+.mx{border-collapse:collapse;width:100%;min-width:640px;font-size:.78em}
+.mx th,.mx td{padding:.55em .6em;text-align:center;border-bottom:1px solid rgba(147,166,201,.18)}
+.mx thead th{font-family:var(--f-d);color:var(--cyan);text-shadow:0 0 8px var(--cyan);vertical-align:bottom}
+.mx thead th small{display:block;font-family:var(--f-b);font-weight:400;font-size:.78em;color:var(--mute);text-shadow:none}
+.mx th.rowh{text-align:left;font-family:var(--f-d);color:#fff;white-space:nowrap}
+.dose{display:inline-block;min-width:1.9em;padding:.15em .5em;border-radius:99px;font-family:var(--f-d);font-weight:800;color:#04050d;background:var(--lime);box-shadow:0 0 12px var(--lime)}
+.dose.alt{background:var(--mag);box-shadow:0 0 12px var(--mag);color:#fff}
+.notes{margin:12px 0 0;padding-left:1.1em;font-size:.8em;color:#cfe0f8}
+.notes li{margin:.25em 0}
+
+/* navigation */
+.nav{position:absolute;left:0;right:0;bottom:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px var(--gutr) calc(10px + env(safe-area-inset-bottom,0px)) var(--gut);background:linear-gradient(0deg,rgba(4,5,13,.95),rgba(4,5,13,0))}
+.nav .count{font-family:var(--f-d);font-weight:700;color:var(--mute);font-variant-numeric:tabular-nums;font-size:.85em}
+.nav .count b{color:#fff;text-shadow:0 0 10px var(--cyan)}
+.nav .name{flex:1;text-align:center;font-size:.75em;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.arrow{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--cyan);background:rgba(5,8,26,.85);color:var(--cyan);font-size:1.2rem;cursor:pointer;box-shadow:0 0 14px color-mix(in srgb,var(--cyan) 50%,transparent)}
+.arrow:hover,.arrow:focus-visible{outline:none;box-shadow:0 0 26px var(--cyan);color:#fff}
+.arrow:disabled{opacity:.3;cursor:default;box-shadow:none}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+
+/* animations d'entrée */
+.slide.active .rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*95ms + 80ms)}
+@keyframes rise{from{opacity:0;transform:translateY(34px) scale(.97);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.slide.active .flick{animation:flick 1.3s steps(1,end) both}
+@keyframes flick{0%{opacity:0}8%{opacity:1}12%{opacity:.25}18%{opacity:1}24%{opacity:.5}30%,100%{opacity:1}}
+.slide.active .float{animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+.slide.active .spin{animation:spin 18s linear infinite;transform-origin:50% 50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+.slide.active .glowpulse{animation:glowpulse 2.4s ease-in-out infinite}
+@keyframes glowpulse{50%{filter:drop-shadow(0 0 22px var(--cyan)) brightness(1.25)}}
+.hero{display:grid;gap:clamp(16px,3vw,48px);grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center}
+.hero svg{width:100%;max-width:420px;justify-self:center;overflow:visible}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.hero svg{max-width:240px;order:-1}.nav .name{display:none}.nav{justify-content:space-between}}
+.chip{display:inline-block;margin:0 8px 8px 0;padding:.35em .9em;border-radius:99px;border:1.5px solid var(--mag);color:#fff;text-shadow:0 0 8px var(--mag);box-shadow:0 0 12px color-mix(in srgb,var(--mag) 50%,transparent);font-size:.85em}
+@media (prefers-reduced-motion:reduce){
+  .slide.active .rise,.slide.active .flick,.slide.active .float,.slide.active .spin,.slide.active .glowpulse,.slide.active .pulse-line{animation:none}
+  .slide,.progress,.bar .col{transition:none}
+}
+</style>
+
+<div class="deck" id="deck" aria-roledescription="présentation">
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="progress" id="prog"></div>
+
+<!-- 1 -->
+<section class="slide" data-name="Titre">
+<div class="inner"><div class="wrap hero">
+  <div>
+    <p class="kick rise" style="--i:0">Santé de famille et santé communautaire</p>
+    <h1 class="neon flick rise" style="--i:1">Vacciner, c'est protéger</h1>
+    <hr class="rule rise" style="--i:2">
+    <p class="lead rise" style="--i:3">La vaccination des enfants : causes de la non-vaccination, impacts et rattrapage vaccinal.</p>
+  </div>
+  <svg viewBox="0 0 200 240" class="float rise glowpulse" style="--i:2" role="img" aria-label="Bouclier néon avec une coche">
+    <defs><filter id="gl"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <path d="M100 12 L178 40 V112 C178 168 144 208 100 228 C56 208 22 168 22 112 V40 Z" fill="rgba(0,240,255,.07)" stroke="#00f0ff" stroke-width="5" filter="url(#gl)"/>
+    <path d="M100 34 L158 54 V112 C158 156 132 188 100 204 C68 188 42 156 42 112 V54 Z" fill="none" stroke="#ff2bd6" stroke-width="2.5" filter="url(#gl)" opacity=".9"/>
+    <path d="M68 118 L92 142 L136 92" fill="none" stroke="#b6ff3b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" filter="url(#gl)"/>
+  </svg>
+</div></div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-name="Plan">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Parcours</p>
+  <h2 class="neon rise" style="--i:1">Sept parties</h2>
+  <div class="grid">
+    <button class="card rise" style="--i:2" data-go="2"><span class="tag">01</span><h3>Définitions</h3><p>Vaccination, non-vaccination, zéro dose</p></button>
+    <button class="card m rise" style="--i:3" data-go="6"><span class="tag">02</span><h3>Causes</h3><p>Pourquoi des enfants ne sont pas vaccinés</p></button>
+    <button class="card l rise" style="--i:4" data-go="8"><span class="tag">03</span><h3>Impacts</h3><p>Santé de l'enfant, santé de famille et santé communautaire</p></button>
+    <button class="card v rise" style="--i:5" data-go="12"><span class="tag">04</span><h3>Rattrapage</h3><p>Pourquoi rattraper</p></button>
+    <button class="card h rise" style="--i:6" data-go="13"><span class="tag">05</span><h3>Maroc</h3><p>Rougeole et diphtérie</p></button>
+    <button class="card rise" style="--i:7" data-go="19"><span class="tag">06</span><h3>Calendriers</h3><p>Rattrapage du PNI par âge</p></button>
+    <button class="card m rise" style="--i:8" data-go="20"><span class="tag">07</span><h3>Rôle des soignants</h3><p>Repérer, retrouver, vacciner</p></button>
+  </div>
+</div></div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-name="Qu'est-ce que la vaccination">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Définition</p>
+  <h2 class="neon rise" style="--i:1">La vaccination</h2>
+  <p class="lead rise" style="--i:2">Administrer un vaccin pour stimuler le système immunitaire et prévenir la maladie avant qu'elle n'apparaisse.</p>
+  <div class="pulse-line rise" style="--i:3"></div>
+  <div class="flow">
+    <div class="card rise" style="--i:4"><h3>Le vaccin</h3><p>Il présente au corps une version inoffensive de l'agent infectieux.</p></div>
+    <div class="card m rise" style="--i:5"><h3>Reconnaissance</h3><p>Le système immunitaire identifie le virus ou la bactérie.</p></div>
+    <div class="card l rise" style="--i:6"><h3>Mémoire</h3><p>Production d'anticorps et formation de cellules mémoires.</p></div>
+    <div class="card v rise" style="--i:7"><h3>Réponse rapide</h3><p>Lors d'un contact futur, l'organisme réagit plus vite et plus fort.</p></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 4 : animation vaccin -->
+<section class="slide" data-name="Le vaccin en action" data-on="vax">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Animation</p>
+  <h2 class="neon rise" style="--i:1">Le vaccin en action</h2>
+  <div class="stage rise" style="--i:2"><canvas id="cvVax" aria-label="Animation : des virus attaquent une cellule, avec ou sans anticorps"></canvas></div>
+  <div class="ctrl rise" style="--i:3">
+    <button class="btn m" id="bSans" aria-pressed="true">Sans vaccin</button>
+    <button class="btn" id="bAvec" aria-pressed="false">Avec vaccin</button>
+    <span class="readout" id="vaxStat" aria-live="polite"></span>
+  </div>
+  <div class="legend"><span><i style="background:var(--cyan)"></i>Cellule</span><span><i style="background:var(--mag)"></i>Virus</span><span><i style="background:var(--lime)"></i>Anticorps</span></div>
+</div></div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-name="Non-vaccination">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Définitions</p>
+  <h2 class="neon m rise" style="--i:1">Non-vaccination</h2>
+  <div class="grid g3">
+    <div class="card h rise" style="--i:2"><span class="tag">TOTALE</span><h3>Aucune dose reçue</h3><p>L'enfant n'a reçu aucun vaccin recommandé.</p></div>
+    <div class="card m rise" style="--i:3"><span class="tag">PARTIELLE</span><h3>Doses incomplètes</h3><p>La vaccination est commencée mais pas terminée.</p></div>
+    <div class="card rise" style="--i:4"><span class="tag">ZÉRO DOSE</span><h3>Pas de DTC1</h3><p>Définition OMS et UNICEF : aucune première dose du vaccin diphtérie-tétanos-coqueluche.</p></div>
+  </div>
+  <p class="mute rise" style="--i:5;margin-top:1.1em">Trois profils de calendrier incomplet</p>
+  <span class="chip rise" style="--i:6">Sous-vacciné</span><span class="chip rise" style="--i:7">En retard vaccinal</span><span class="chip rise" style="--i:8">Dose manquante pour l'âge</span>
+</div></div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-name="Pourquoi vacciner">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Pourquoi vacciner</p>
+  <div class="stat l rise" style="--i:1"><div class="big"><span data-count="4000000" data-pre="+ ">+ 4 000 000</span></div><div class="lab" style="max-width:30em">de décès évités chaque année grâce à la vaccination des enfants (OMS)</div></div>
+  <div class="grid g3" style="margin-top:.8em">
+    <div class="card rise" style="--i:3"><span class="tag">INDIVIDUEL</span><h3>Moins de complications</h3><p>Moins de maladies, de séquelles et de décès.</p></div>
+    <div class="card l rise" style="--i:4"><span class="tag">COLLECTIF</span><h3>Moins de transmission</h3><p>Les nourrissons et les personnes fragiles sont protégés indirectement.</p></div>
+    <div class="card m rise" style="--i:5"><span class="tag">SYSTÈME DE SANTÉ</span><h3>Moins d'hospitalisations</h3><p>Un investissement préventif majeur.</p></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-name="Causes">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Causes</p>
+  <h2 class="neon m rise" style="--i:1">Pourquoi des enfants ne sont pas vaccinés</h2>
+  <div class="grid">
+    <div class="card rise" style="--i:2"><h3>Individuelles</h3><ul><li>Peur des effets secondaires</li><li>Manque de confiance</li><li>Fausses informations</li></ul></div>
+    <div class="card m rise" style="--i:3"><h3>Familiales et sociales</h3><ul><li>Refus des parents</li><li>Croyances, réseaux sociaux</li><li>Rendez-vous oubliés</li></ul></div>
+    <div class="card l rise" style="--i:4"><h3>Économiques</h3><ul><li>Frais de transport</li><li>Manque de temps</li><li>Contraintes professionnelles</li></ul></div>
+    <div class="card v rise" style="--i:5"><h3>Système de santé</h3><ul><li>Éloignement des centres</li><li>Ruptures, files d'attente</li><li>Manque de personnel</li></ul></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-name="Facteurs favorisants">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Facteurs favorisants</p>
+  <h2 class="neon rise" style="--i:1">Six terrains de risque</h2>
+  <div class="hexes">
+    <div class="hexwrap rise" style="--i:2;--c:var(--cyan)"><div class="hex" style="--c:var(--cyan)"><div><b>Sociodémographiques</b>Analphabétisme, pauvreté</div></div></div>
+    <div class="hexwrap rise" style="--i:3;--c:var(--mag)"><div class="hex" style="--c:var(--mag)"><div><b>Géographiques</b>Milieu rural isolé</div></div></div>
+    <div class="hexwrap rise" style="--i:4;--c:var(--lime)"><div class="hex" style="--c:var(--lime)"><div><b>Culturels</b>Croyances et pratiques</div></div></div>
+    <div class="hexwrap rise" style="--i:5;--c:var(--vio)"><div class="hex" style="--c:var(--vio)"><div><b>Psychologiques</b>Peur, anxiété, méfiance</div></div></div>
+    <div class="hexwrap rise" style="--i:6;--c:var(--hot)"><div class="hex" style="--c:var(--hot)"><div><b>Informationnels</b>Désinformation</div></div></div>
+    <div class="hexwrap rise" style="--i:7;--c:var(--cyan)"><div class="hex" style="--c:var(--cyan)"><div><b>Organisationnels</b>Ruptures de stock, services mal organisés</div></div></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-name="Impact sur l'enfant">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Impact</p>
+  <h2 class="neon m rise" style="--i:1">Un enfant sans bouclier immunitaire</h2>
+  <div class="timeline">
+    <div class="node rise" style="--i:2;--c:var(--cyan)"><div class="when">3 à 6 mois</div><h3>Anticorps maternels disparus</h3><p>La protection reçue de la mère s'éteint.</p></div>
+    <div class="node rise" style="--i:3;--c:var(--mag)"><div class="when">7 à 14 jours</div><h3>Réponse immunitaire lente</h3><p>Le microbe se multiplie sans frein.</p></div>
+    <div class="node rise" style="--i:4;--c:var(--hot)"><div class="when"><span data-count="90" data-pre="> " data-suf=" %">&gt; 90 %</span></div><h3>Forme symptomatique</h3><p>Risque face à la rougeole ou à la coqueluche.</p></div>
+  </div>
+  <p class="mute rise" style="--i:5;margin-top:1.2em">Conséquences</p>
+  <span class="chip rise" style="--i:6">Complications</span><span class="chip rise" style="--i:7">Séquelles</span><span class="chip rise" style="--i:8">Hospitalisation</span><span class="chip rise" style="--i:9">Soins intensifs</span>
+</div></div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-name="Mortalité infantile">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Impact</p>
+  <h2 class="neon m rise" style="--i:1">Mortalité infantile</h2>
+  <div class="grid g3">
+    <div class="card h rise" style="--i:2"><span class="tag">COQUELUCHE MALIGNE</span><h3>Nourrisson de moins de 6 mois</h3><p>Hypertension pulmonaire, défaillance de plusieurs organes.</p></div>
+    <div class="card m rise" style="--i:3"><span class="tag">TÉTANOS NÉONATAL</span><div class="big" style="font-size:clamp(2rem,4.6vw,3.6rem);--c:var(--mag)"><span data-count="90" data-pre="70 à " data-suf=" %">70 à 90 %</span></div><p>de létalité sans soins intensifs.</p></div>
+    <div class="card v rise" style="--i:4"><span class="tag">ROUGEOLE</span><h3>Amnésie immunitaire</h3><p>Perte de lymphocytes mémoires et plus d'infections pendant 2 à 3 ans.</p></div>
+  </div>
+  <p class="lead rise" style="--i:5;margin-top:1em;color:#fff;text-shadow:0 0 14px var(--hot)">Un enfant zéro dose a un sur-risque majeur de décès avant 5 ans.</p>
+</div></div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-name="Santé communautaire">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Impact sur la santé de famille et la santé communautaire</p>
+  <h2 class="neon rise" style="--i:1">Quand la couverture baisse</h2>
+  <div class="timeline">
+    <div class="node rise" style="--i:2;--c:var(--hot)"><h3>Maladies de retour</h3><p>Rougeole, poliomyélite, coqueluche, diphtérie</p></div>
+    <div class="node rise" style="--i:3;--c:var(--mag)"><h3>Épidémies</h3><p>Les enfants non vaccinés transmettent plus facilement.</p></div>
+    <div class="node rise" style="--i:4;--c:var(--vio)"><h3>Immunité collective en baisse</h3><p>Nourrissons et immunodéprimés exposés.</p></div>
+    <div class="node rise" style="--i:5;--c:var(--cyan)"><h3>Système de santé surchargé</h3><p>Consultations, hospitalisations, personnel mobilisé.</p></div>
+    <div class="node rise" style="--i:6;--c:var(--lime)"><h3>Coûts économiques et sociaux</h3><p>Dépenses, absentéisme, inégalités.</p></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 12 : immunité collective -->
+<section class="slide" data-name="Immunité collective" data-on="herd">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Simulation</p>
+  <h2 class="neon l rise" style="--i:1">L'immunité collective</h2>
+  <div class="stage rise" style="--i:2"><div class="people" id="people" aria-label="288 personnes : vaccinées, non protégées ou infectées"></div></div>
+  <div class="ctrl rise" style="--i:3">
+    <label for="cov" class="readout">Couverture vaccinale : <span id="covOut">60</span> %</label>
+    <input type="range" id="cov" min="0" max="100" value="60">
+    <button class="btn" id="bRun">Relancer l'épidémie</button>
+  </div>
+  <p class="readout" id="herdStat" style="margin:.6em 0 0" aria-live="polite"></p>
+  <div class="legend"><span><i style="background:var(--cyan)"></i>Vaccinée</span><span><i style="background:var(--vio)"></i>Non protégée</span><span><i style="background:var(--hot)"></i>Infectée</span></div>
+  <p class="small" style="margin-top:.6em">Modèle simplifié : un cas contamine au hasard 12 personnes, le vaccin protège à 100 %. Pour la rougeole, il faut environ 95 % de couverture.</p>
+</div></div>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-name="Importance du rattrapage">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Axe 5</p>
+  <h2 class="neon v rise" style="--i:1">Importance du rattrapage vaccinal</h2>
+  <div class="grid">
+    <div class="card rise" style="--i:2"><span class="tag">01</span><h3>Récupérer</h3><p>Les enfants zéro dose et insuffisamment vaccinés.</p></div>
+    <div class="card m rise" style="--i:3"><span class="tag">02</span><h3>Prévenir</h3><p>Les épidémies.</p></div>
+    <div class="card l rise" style="--i:4"><span class="tag">03</span><h3>Améliorer</h3><p>La couverture vaccinale.</p></div>
+    <div class="card v rise" style="--i:5"><span class="tag">04</span><h3>Réduire</h3><p>Les inégalités sanitaires.</p></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-name="Maroc : la couverture">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Maroc</p>
+  <h2 class="neon rise" style="--i:1">La couverture a chuté</h2>
+  <div class="grid g2" style="align-items:end">
+    <div class="stat l rise" style="--i:2"><div class="big">95 à 96 %</div><div class="lab">de couverture pendant des années, avant le Covid-19</div></div>
+    <div class="stat h rise" style="--i:3"><div class="big"><span data-count="75" data-pre="≈ " data-suf=" %">≈ 75 %</span></div><div class="lab">pendant le Covid-19, avec des écarts régionaux, notamment à Souss-Massa</div></div>
+  </div>
+  <p class="small rise" style="--i:4">Sources : Le Matin (avril 2024) ; Hespress (octobre 2026).</p>
+</div></div>
+</section>
+
+<!-- 15 -->
+<section class="slide" data-name="Rougeole">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Rougeole · jusqu'à avril 2025</p>
+  <h2 class="neon m rise" style="--i:1">Une épidémie nationale</h2>
+  <div class="grid">
+    <div class="stat rise" style="--i:2"><div class="big"><span data-count="25000" data-pre="+ ">+ 25 000</span></div><div class="lab">cas suspects</div></div>
+    <div class="stat m rise" style="--i:3"><div class="big"><span data-count="13706">13 706</span></div><div class="lab">cas confirmés</div></div>
+    <div class="stat h rise" style="--i:4"><div class="big"><span data-count="184">184</span></div><div class="lab">décès</div></div>
+    <div class="stat v rise" style="--i:5"><div class="big"><span data-count="68" data-suf=" %">68 %</span></div><div class="lab">des cas ont moins de 18 ans</div></div>
+    <div class="stat l rise" style="--i:6"><div class="big"><span data-count="49" data-suf=" %">49 %</span></div><div class="lab">des cas étaient non vaccinés</div></div>
+  </div>
+  <p class="small rise" style="--i:7">Source : OMS, 13 mai 2025. Statut vaccinal : janvier 2024 à février 2025.</p>
+</div></div>
+</section>
+
+<!-- 16 -->
+<section class="slide" data-name="Riposte nationale">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Rattrapage national · mars 2024 à mai 2025</p>
+  <h2 class="neon l rise" style="--i:1">La riposte : vérifier, rattraper</h2>
+  <div class="grid">
+    <div class="stat rise" style="--i:2"><div class="big"><span data-count="10.76" data-dec="2" data-suf=" M">10,76 M</span></div><div class="lab">enfants de moins de 18 ans dont le statut a été vérifié (98,57 %)</div></div>
+    <div class="stat m rise" style="--i:3"><div class="big"><span data-count="754202">754 202</span></div><div class="lab">non vaccinés ou incomplètement vaccinés</div></div>
+    <div class="stat l rise" style="--i:4"><div class="big"><span data-count="586912">586 912</span></div><div class="lab">enfants rattrapés (78 % de ce groupe)</div></div>
+    <div class="stat v rise" style="--i:5"><div class="big"><span data-count="80" data-pre="− " data-suf=" %">− 80 %</span></div><div class="lab">de cas de rougeole en 16 semaines</div></div>
+  </div>
+  <p class="small rise" style="--i:6">Source : Hespress, 27 mai 2025 (données au 16 mai 2025).</p>
+</div></div>
+</section>
+
+<!-- 17 -->
+<section class="slide" data-name="Diphtérie 2026" data-on="bars">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">2026</p>
+  <h2 class="neon m rise" style="--i:1">La diphtérie réapparaît</h2>
+  <p class="lead rise" style="--i:2">Premiers cas depuis plus de 30 ans.</p>
+  <div class="bars rise" style="--i:3" id="bars">
+    <div class="bar" style="--c:var(--vio)"><div class="v">9</div><div class="col" data-h="30"></div><div class="d">28 septembre<br>Souss-Massa, dont 1 confirmé</div></div>
+    <div class="bar" style="--c:var(--mag)"><div class="v">11</div><div class="col" data-h="37"></div><div class="d">8 octobre<br>cas confirmés, 1 décès</div></div>
+    <div class="bar" style="--c:var(--hot)"><div class="v">30</div><div class="col" data-h="100"></div><div class="d">30 octobre<br>cas confirmés, 3 décès</div></div>
+  </div>
+  <p class="small" style="margin-top:.8em">Décomptes publiés à des dates et avec des définitions différentes. Sources : ministère de la Santé via SantéMag, Le360 et L'Information.</p>
+</div></div>
+</section>
+
+<!-- 18 -->
+<section class="slide" data-name="Diphtérie : les rappels">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Diphtérie</p>
+  <h2 class="neon rise" style="--i:1">Les rappels comptent</h2>
+  <div class="grid g2">
+    <div class="card h rise" style="--i:2"><span class="tag">QUI EST TOUCHÉ</span><h3>Enfants non vaccinés ou sans rappels</h3><p>Surtout 10 à 15 ans. Les familles oublient les rappels vers 5-6 ans et 11-12 ans (Dr Afif).</p></div>
+    <div class="card m rise" style="--i:3"><span class="tag">CAUSES AVANCÉES</span><h3>Couverture en baisse</h3><p>Le ministère cite la baisse de couverture et les fausses informations sur les vaccins.</p></div>
+    <div class="card l rise" style="--i:4"><span class="tag">RIPOSTE</span><h3>Contacts suivis</h3><p>Antibiotiques préventifs pour les contacts à risque élevé, vaccination recommandée pour tous les contacts.</p></div>
+    <div class="card rise" style="--i:5"><span class="tag">RATTRAPAGE PENDANT L'ÉPIDÉMIE</span><ul><li>Rappel dès 5 ans après la dernière dose</li><li>Avant 7 ans : DTC, Penta ou hexavalent</li><li>Dès 7 ans : Td</li><li>2e dose après 1 mois, 3e après 6 mois</li></ul></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 19 -->
+<section class="slide" data-name="Règles d'or">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Rattrapage</p>
+  <h2 class="neon l rise" style="--i:1">Règles d'or</h2>
+  <div class="grid">
+    <div class="card rise" style="--i:2"><h3>Jamais à zéro</h3><p>On ne reprend jamais le calendrier depuis le début.</p></div>
+    <div class="card m rise" style="--i:3"><h3>Compter les doses</h3><p>Évaluer les doses déjà reçues.</p></div>
+    <div class="card l rise" style="--i:4"><h3>Respecter</h3><p>Les âges minimaux et les intervalles.</p></div>
+    <div class="card v rise" style="--i:5"><h3>Vérifier le carnet</h3><p>À chaque consultation, quel que soit le motif.</p></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 20 -->
+<section class="slide" data-name="Calendriers de rattrapage" data-on="mx">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Calendriers du PNI</p>
+  <h2 class="neon rise" style="--i:1">Rattrapage selon l'âge</h2>
+  <div class="tabs rise" style="--i:2" role="tablist" id="tabs"></div>
+  <div class="mxw rise" style="--i:3"><table class="mx" id="mx"></table></div>
+  <ul class="notes" id="mxNotes"></ul>
+  <p class="small">Transcrit depuis les calendriers de rattrapage du PNI (photographies). À confirmer avec la dernière version du PNI.</p>
+</div></div>
+</section>
+
+<!-- 21 -->
+<section class="slide" data-name="Rôle : repérer et mobiliser">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Rôle des professionnels de santé</p>
+  <h2 class="neon m rise" style="--i:1">Repérer et mobiliser</h2>
+  <div class="flow">
+    <div class="card rise" style="--i:2"><h3>Identifier</h3><p>Vérifier les carnets, tenir des listes de suivi.</p></div>
+    <div class="card m rise" style="--i:3"><h3>Retrouver</h3><p>Appeler ou visiter les perdus de vue.</p></div>
+    <div class="card l rise" style="--i:4"><h3>Sensibiliser</h3><p>Écoles, associations, leaders locaux.</p></div>
+    </div>
+</div></div>
+</section>
+
+<section class="slide" data-name="Rôle : rattraper et coopérer">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Rôle des professionnels de santé</p>
+  <h2 class="neon m rise" style="--i:1">Rattraper et coopérer</h2>
+  <p class="lead rise" style="--i:2">À chaque consultation, vérifier le carnet de vaccination et proposer tout de suite les doses manquantes.</p>
+  <div class="flow" style="counter-reset:st 3">
+    <div class="card v rise" style="--i:3"><h3>Organiser</h3><p>Séances de rattrapage pour les doses manquantes.</p></div>
+    <div class="card h rise" style="--i:4"><h3>Collaborer</h3><p>Campagnes et accès facilité aux services.</p></div>
+  </div>
+</div></div>
+</section>
+
+<!-- 22 -->
+<section class="slide" data-name="Conclusion">
+<div class="inner"><div class="wrap">
+  <p class="kick rise">Conclusion</p>
+  <h2 class="neon flick rise" style="--i:1">Chaque dose compte</h2>
+  <p class="lead rise" style="--i:2">Rougeole hier, diphtérie aujourd'hui : la maladie revient là où des doses manquent. Un enfant vacciné protège toute la communauté.</p>
+  <p class="neon l rise" style="--i:3;font-family:var(--f-d);font-weight:800;font-size:clamp(1.6rem,3.4vw,2.8rem)">Merci</p>
+  <p class="small rise" style="--i:4;max-width:60em">Sources : OMS, Measles – Morocco (13 mai 2025) ; Hespress (27 mai 2025, 29 octobre 2026) ; Le360 (8 et 30 octobre 2026) ; L'Information (30 octobre 2026) ; SantéMag (28 septembre 2026) ; Le Matin (22 avril 2024) ; calendriers du PNI (photographies) ; documents de cours.</p>
+</div></div>
+</section>
+
+<div class="nav">
+  <button class="arrow" id="prev" aria-label="Diapositive précédente">←</button>
+  <div class="name" id="nm"></div>
+  <button class="arrow" id="fs" aria-label="Plein écran" title="Plein écran (touche F)">⛶</button>
+  <div class="count" id="ct"></div>
+  <button class="arrow" id="next" aria-label="Diapositive suivante">→</button>
+</div>
+</div>
+
+<script>
+(function(){
+  var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(s,r){return (r||document).querySelector(s)};
+  var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+  var slides = $$('.slide'), cur = -1;
+  var fmt = function(v,d){return new Intl.NumberFormat('fr-FR',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}).format(v)};
+
+  /* ---------- fond animé ---------- */
+  var bg = $('#bg'), bx = bg.getContext('2d'), parts = [], BW=0, BH=0, bgOn=true;
+  function bgSize(){var d=Math.min(window.devicePixelRatio||1,2);BW=bg.clientWidth;BH=bg.clientHeight;bg.width=BW*d;bg.height=BH*d;bx.setTransform(d,0,0,d,0,0);
+    parts=[];for(var i=0;i<(BW<600?28:60);i++)parts.push({x:Math.random()*BW,y:Math.random()*BH,r:Math.random()*2+.6,vx:(Math.random()-.5)*.25,vy:-Math.random()*.35-.05,c:['#00f0ff','#ff2bd6','#b6ff3b','#8a5cff'][i%4]})}
+  var gridT=0;
+  function bgDraw(){
+    bx.clearRect(0,0,BW,BH);
+    var hz=BH*.62; bx.lineWidth=1; gridT=(gridT+(RM?0:.6))%60;
+    bx.strokeStyle='rgba(138,92,255,.16)';
+    for(var i=-12;i<=12;i++){bx.beginPath();bx.moveTo(BW/2+i*BW*.02,hz);bx.lineTo(BW/2+i*BW*.16,BH);bx.stroke()}
+    for(var j=0;j<10;j++){var t=((j*60+gridT)/600), y=hz+(BH-hz)*t*t;bx.beginPath();bx.moveTo(0,y);bx.lineTo(BW,y);bx.stroke()}
+    parts.forEach(function(p){
+      if(!RM){p.x+=p.vx;p.y+=p.vy;if(p.y<-5){p.y=BH+5;p.x=Math.random()*BW}if(p.x<-5)p.x=BW+5;if(p.x>BW+5)p.x=-5}
+      bx.beginPath();bx.fillStyle=p.c;bx.shadowColor=p.c;bx.shadowBlur=10;bx.globalAlpha=.7;bx.arc(p.x,p.y,p.r,0,6.283);bx.fill();
+    });
+    bx.shadowBlur=0;bx.globalAlpha=1;
+  }
+
+  /* ---------- compteurs ---------- */
+  function counters(sl){
+    $$('[data-count]',sl).forEach(function(el){
+      var to=parseFloat(el.dataset.count), dec=parseInt(el.dataset.dec||'0',10), pre=el.dataset.pre||'', suf=el.dataset.suf||'';
+      var finalTxt=pre+fmt(to,dec)+suf;
+      if(RM){el.textContent=finalTxt;return}
+      var t0=performance.now(), dur=1300;
+      (function step(now){var k=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-k,3);
+        el.textContent=pre+fmt(to*e,dec)+suf; if(k<1&&slides[cur]===sl)requestAnimationFrame(step); else el.textContent=finalTxt})(t0);
+    });
+  }
+
+  /* ---------- barres ---------- */
+  function bars(sl){$$('.col',sl).forEach(function(c){c.style.height='0';});
+    setTimeout(function(){$$('.col',sl).forEach(function(c,i){setTimeout(function(){c.style.height=c.dataset.h+'%'},RM?0:i*300)})},RM?0:500)}
+  $$('.col').forEach(function(c){c.style.height=c.dataset.h+'%'});
+
+  /* ---------- animation vaccin ---------- */
+  var cv=$('#cvVax'), cx=cv.getContext('2d'), vW=0,vH=0,vd=1, mode='sans', V=[], A=[], cell={}, infected=0, neutral=0, vaxRun=false, spawnT=0;
+  function vaxSize(){vd=Math.min(window.devicePixelRatio||1,2);vW=cv.clientWidth;vH=cv.clientHeight;cv.width=vW*vd;cv.height=vH*vd;cx.setTransform(vd,0,0,vd,0,0)}
+  function vaxInit(){vaxSize();cell={x:vW*.3,y:vH/2,r:Math.min(vH*.2,vW*.12)};V=[];A=[];infected=0;neutral=0;spawnT=0;
+    if(mode==='avec'){for(var i=0;i<26;i++){A.push({a:Math.random()*6.283,rr:cell.r*(1.5+Math.random()*1.5),s:(Math.random()*.012+.006)*(Math.random()<.5?-1:1),x:0,y:0})}}
+    stat()}
+  function stat(){$('#vaxStat').textContent=mode==='sans'?'Cellules touchées : '+Math.min(100,infected*8)+' %':'Virus neutralisés : '+neutral}
+  function drawVirus(v){cx.save();cx.translate(v.x,v.y);cx.globalAlpha=v.dead?Math.max(0,v.al):1;var col=v.dead?'#6b7a99':'#ff2bd6';
+    cx.strokeStyle=col;cx.fillStyle='rgba(10,5,25,.9)';cx.shadowColor=col;cx.shadowBlur=14;cx.lineWidth=2;
+    for(var i=0;i<10;i++){var a=i/10*6.283+v.rot;cx.beginPath();cx.moveTo(Math.cos(a)*9,Math.sin(a)*9);cx.lineTo(Math.cos(a)*15,Math.sin(a)*15);cx.stroke();cx.beginPath();cx.arc(Math.cos(a)*16,Math.sin(a)*16,2.2,0,6.283);cx.fillStyle=col;cx.fill()}
+    cx.beginPath();cx.arc(0,0,9,0,6.283);cx.fillStyle='rgba(10,5,25,.95)';cx.fill();cx.stroke();cx.restore()}
+  function drawAb(a){cx.save();cx.translate(a.x,a.y);cx.rotate(a.a+1.57);cx.strokeStyle='#b6ff3b';cx.shadowColor='#b6ff3b';cx.shadowBlur=10;cx.lineWidth=2.2;cx.lineCap='round';
+    cx.beginPath();cx.moveTo(0,8);cx.lineTo(0,0);cx.lineTo(-6,-8);cx.moveTo(0,0);cx.lineTo(6,-8);cx.stroke();cx.restore()}
+  function vaxFrame(){
+    if(!vaxRun)return;
+    cx.clearRect(0,0,vW,vH);
+    var k=Math.min(1,infected/12), col=mode==='sans'?'rgb('+Math.round(0+255*k)+','+Math.round(240-160*k)+','+Math.round(255-165*k)+')':'#00f0ff';
+    cx.save();cx.shadowColor=col;cx.shadowBlur=26;cx.strokeStyle=col;cx.lineWidth=3.5;cx.fillStyle='rgba(0,240,255,.07)';cx.beginPath();cx.arc(cell.x,cell.y,cell.r,0,6.283);cx.fill();cx.stroke();
+    cx.beginPath();cx.arc(cell.x+cell.r*.1,cell.y-cell.r*.1,cell.r*.34,0,6.283);cx.lineWidth=2;cx.stroke();cx.restore();
+    spawnT++; if(spawnT%(RM?90:44)===0&&V.length<16){V.push({x:vW+20,y:vH*.15+Math.random()*vH*.7,rot:0,dead:false,al:1,vx:0,vy:0})}
+    A.forEach(function(a){a.a+=a.s;a.x=cell.x+Math.cos(a.a)*a.rr;a.y=cell.y+Math.sin(a.a)*a.rr;drawAb(a)});
+    for(var i=V.length-1;i>=0;i--){var v=V[i];
+      if(v.dead){v.x+=v.vx;v.y+=v.vy;v.al-=.012;v.rot+=.02;if(v.al<=0){V.splice(i,1);continue}}
+      else{var dx=cell.x-v.x,dy=cell.y-v.y,d=Math.hypot(dx,dy),sp=RM?1:1.5;v.x+=dx/d*sp;v.y+=dy/d*sp;v.rot+=.03;
+        if(mode==='avec'){for(var j=0;j<A.length;j++){if(Math.hypot(A[j].x-v.x,A[j].y-v.y)<20){v.dead=true;v.vx=(Math.random()-.5)*.8;v.vy=(Math.random()-.5)*.8;neutral++;stat();break}}}
+        if(!v.dead&&d<cell.r+6){infected++;V.splice(i,1);stat();continue}}
+      drawVirus(v)}
+    requestAnimationFrame(vaxFrame)}
+  function setMode(m){mode=m;$('#bSans').setAttribute('aria-pressed',m==='sans');$('#bAvec').setAttribute('aria-pressed',m==='avec');vaxInit()}
+  $('#bSans').onclick=function(){setMode('sans')};$('#bAvec').onclick=function(){setMode('avec')};
+
+  /* ---------- immunité collective ---------- */
+  var COLS=24,ROWS=12,N=COLS*ROWS,people=$('#people'),dots=[],rv=[],timers=[];
+  function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  (function(){var r=rng(2026);for(var i=0;i<N;i++){rv.push(r());var d=document.createElement('div');d.className='p';people.appendChild(d);dots.push(d)}})();
+  function herd(){
+    timers.forEach(clearTimeout);timers=[];
+    var cov=parseInt($('#cov').value,10)/100; $('#covOut').textContent=Math.round(cov*100);
+    var seed=Math.floor(N/2)+Math.floor(COLS/2), vac=[], nv=0;
+    for(var i=0;i<N;i++){vac[i]=(i!==seed&&rv[i]<cov);if(vac[i])nv++;dots[i].className='p'+(vac[i]?' vac':'')}
+    var r=rng(77), infected={}, gen=[seed], gens=[[seed]]; infected[seed]=1;
+    while(gen.length&&gens.length<30){
+      var nxt=[];
+      gen.forEach(function(){for(var k=0;k<12;k++){var t=Math.floor(r()*N);if(!vac[t]&&!infected[t]){infected[t]=1;nxt.push(t)}}});
+      if(nxt.length)gens.push(nxt);
+      gen=nxt}
+    var total=Object.keys(infected).length;
+    function show(gi){gens[gi].forEach(function(i){dots[i].classList.add('inf')});
+      if(gi===gens.length-1){var pct=Math.round(total/N*100);
+        $('#herdStat').textContent=total<=3?'Épidémie bloquée : '+total+' personne'+(total>1?'s':'')+' touchée'+(total>1?'s':'')+'. La communauté est protégée.':fmt(total)+' personnes touchées sur '+N+' ('+pct+' %).'}}
+    $('#herdStat').textContent='';
+    gens.forEach(function(g,gi){timers.push(setTimeout(function(){show(gi)},RM?0:gi*420))});
+  }
+  $('#cov').addEventListener('input',herd);$('#bRun').onclick=herd;
+
+  /* ---------- matrice de rattrapage ---------- */
+  var SCH=[
+   {tab:'12 mois et moins',v:[['1re visite',''],['2e visite','+ 15 j'],['3e visite','1 mois après la 1re'],['4e visite','1 mois après la 3e'],['5e visite','15 j après la 4e'],['6e visite','2 mois min. après la 5e']],
+    rows:[['BCG',{0:'1'}],['Penta',{0:'1',2:'2',3:'3'}],['VPO',{0:'1',2:'2',3:'3'}],['VPI',{0:'1'}],['RR',{0:'1'}],['Pneumo',{1:'1',4:'2',5:'3'}],['Rotavirus',{0:'1',2:'2',3:'3'}]],
+    notes:['RR : jamais avant 9 mois ; 2e dose à 18 mois.','Rappels DTC et VPO à 18 mois et à 5 ans.','Pneumo : avant 7 mois, 4 doses de PCV13 ; de 7 à 11 mois, 3 doses espacées de 2 mois minimum ; décaler de 15 jours par rapport au Penta.','Rotavirus : ne jamais initier après 24 mois.']},
+   {tab:'1 à 3 ans',v:[['1re visite',''],['2e visite','+ 15 j'],['3e visite','1 mois après la 1re'],['4e visite','1 mois après la 3e'],['5e visite','2 mois après la 2e'],['6e visite','6 mois après la 3e']],
+    rows:[['BCG',{0:'1'}],['Penta / DTC',{0:'1 Penta',2:'2 DTC'}],['Hépatite B',{2:'1',5:'2'}],['VPO',{0:'1',2:'2',3:'3'}],['VPI',{0:'1'}],['RR',{0:'1',2:'2'}],['Pneumo',{1:'1*',4:'2'}],['Rotavirus',{0:'1',2:'2',3:'3'}]],
+    notes:['Rappels DTC : 6 mois après la 3e visite, puis 4 ans après le 1er rappel.','RR : 2e dose à partir de 18 mois. Jamais vacciné et plus de 18 mois : 2 doses à 1 mois d\'intervalle.','Pneumo : 12 à 23 mois, 2 doses espacées de 2 mois minimum ; * 2 à 5 ans, 1 dose ; décaler de 15 jours par rapport au Penta.','Rotavirus (ROTASIL) : âge limite 24 mois. BCG : chercher la cicatrice.']},
+   {tab:'3 à 6 ans',v:[['1re visite',''],['2e visite','+ 15 j'],['3e visite','1 mois après la 1re'],['4e visite','1 mois après la 3e'],['5e visite','6 mois après la 3e']],
+    rows:[['BCG',{0:'1'}],['DTC',{0:'1',2:'2',4:'3'}],['Hépatite B',{0:'1',2:'2',4:'3'}],['VPO',{0:'1',2:'2',3:'3',4:'4'}],['VPI',{0:'1'}],['RR',{0:'1',2:'2'}],['Pneumo',{1:'1'}]],
+    notes:['Pas de Penta après 3 ans.','De 3 à 5 ans : rappel DTC ou Td (selon l\'âge) après 4 ans ; Td à partir de 7 ans (annotation manuscrite, à confirmer).','VPO : une dose avec le rappel DTC ou Td. Pneumo : une seule dose avant 5 ans.','BCG : chercher la cicatrice.']}
+  ];
+  var tabs=$('#tabs'), tIdx=0;
+  SCH.forEach(function(s,i){var b=document.createElement('button');b.className='btn'+(i===0?' on':'');b.type='button';b.setAttribute('role','tab');b.textContent=s.tab;b.onclick=function(){tIdx=i;renderMx()};tabs.appendChild(b)});
+  function renderMx(){
+    var s=SCH[tIdx];$$('.btn',tabs).forEach(function(b,i){b.classList.toggle('on',i===tIdx);b.setAttribute('aria-selected',i===tIdx)});
+    var h='<thead><tr><th></th>'+s.v.map(function(v){return '<th>'+v[0]+'<small>'+v[1]+'</small></th>'}).join('')+'</tr></thead><tbody>';
+    s.rows.forEach(function(r){h+='<tr><th class="rowh">'+r[0]+'</th>';for(var i=0;i<s.v.length;i++){var d=r[1][i];h+='<td>'+(d?'<span class="dose'+(/DTC|Td/.test(d)?' alt':'')+'">'+d+'</span>':'')+'</td>'}h+='</tr>'});
+    $('#mx').innerHTML=h+'</tbody>';
+    $('#mxNotes').innerHTML=s.notes.map(function(n){return '<li>'+n+'</li>'}).join('');
+  }
+  renderMx();
+
+  /* ---------- navigation ---------- */
+  function stopAll(){vaxRun=false;timers.forEach(clearTimeout)}
+  function go(i,silent){
+    i=Math.max(0,Math.min(slides.length-1,i)); if(i===cur)return;
+    stopAll(); cur=i;
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i);s.setAttribute('aria-hidden',k!==i)});
+    var sl=slides[i]; sl.scrollTop=0;
+    $('#prog').style.width=((i+1)/slides.length*100)+'%';
+    $('#ct').innerHTML='<b>'+(i+1)+'</b> / '+slides.length; $('#nm').textContent=sl.dataset.name||'';
+    $('#prev').disabled=i===0; $('#next').disabled=i===slides.length-1;
+    counters(sl);
+    var on=sl.dataset.on;
+    if(on==='vax'){setMode('sans');vaxRun=true;requestAnimationFrame(vaxFrame)}
+    if(on==='herd'){herd()}
+    if(on==='bars'){bars(sl)}
+    if(!silent){try{history.replaceState(null,'','#diapo-'+(i+1))}catch(e){location.hash='diapo-'+(i+1)}}
+  }
+  $('#prev').onclick=function(){go(cur-1)};$('#next').onclick=function(){go(cur+1)};
+  $$('[data-go]').forEach(function(b){b.onclick=function(){go(parseInt(b.dataset.go,10))}});
+  document.addEventListener('keydown',function(e){
+    if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName)&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))return;
+    if(['ArrowRight','PageDown',' '].indexOf(e.key)>-1){e.preventDefault();go(cur+1)}
+    else if(['ArrowLeft','PageUp'].indexOf(e.key)>-1){e.preventDefault();go(cur-1)}
+    else if(e.key==='Home')go(0);else if(e.key==='End')go(slides.length-1)});
+  var sx=null,sy=null;
+  $('#deck').addEventListener('touchstart',function(e){if(e.target.closest('input,.mxw,.tabs'))return;sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  $('#deck').addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){go(cur+(dx<0?1:-1))}},{passive:true});
+  window.addEventListener('resize',function(){bgSize();if(vaxRun)vaxInit()});
+  window.addEventListener('hashchange',function(){var m=/^#diapo-(\d+)$/.exec(location.hash);if(m)go(parseInt(m[1],10)-1,true)});
+
+  /* ---------- plein écran ---------- */
+  var fsBtn=$('#fs');
+  function isFs(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
+  function toggleFs(){
+    try{
+      var r;
+      if(isFs()){r=(document.exitFullscreen||document.webkitExitFullscreen).call(document)}
+      else{var el=document.documentElement;r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}
+      if(r&&r.catch)r.catch(function(){fsBtn.title='Plein écran indisponible ici'});
+    }catch(e){fsBtn.title='Plein écran indisponible ici'}
+  }
+  if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)){fsBtn.hidden=true}
+  fsBtn.onclick=toggleFs;
+  ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){document.addEventListener(ev,function(){fsBtn.textContent=isFs()?'✕':'⛶';fsBtn.setAttribute('aria-label',isFs()?'Quitter le plein écran':'Plein écran');setTimeout(function(){bgSize();if(vaxRun)vaxInit()},150)})});
+  document.addEventListener('keydown',function(e){if((e.key==='f'||e.key==='F')&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!/INPUT|TEXTAREA/.test((e.target&&e.target.tagName)||'')){toggleFs()}});
+
+  bgSize(); (function loop(){bgDraw();requestAnimationFrame(loop)})();
+  var m=/^#diapo-(\d+)$/.exec(location.hash); go(m?parseInt(m[1],10)-1:0,true);
+})();
+</script>
+
+</body></html>
